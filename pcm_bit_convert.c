@@ -158,7 +158,9 @@ int convert_pcm_bit(const char* scr_path, const char* out_path, int sample_bit)
         return 1;
 
     int sample_byte_size = sample_bit / 8; 
-    WAVE_HEADER out_header; 
+    
+    // wave file header setting
+    WAVE_HEADER out_header;
     memcpy(out_header.Riff.ChunkID, "RIFF", 4); 
     out_header.Riff.ChunkSize =  out_size + 36; 
     memcpy(out_header.Riff.Format, "WAVE", 4); 
@@ -204,7 +206,9 @@ int convert_pcm_bit(const char* scr_path, const char* out_path, int sample_bit)
         //y[2] = 0x00;
         //y[3] = 0x00;
     
+        // 24bit need to be 3 bytes aligned
         fwrite(frame, sample_byte_size, 1, f_out);
+        
         p += 2; 
     } 
     fclose(f_out);
