@@ -183,15 +183,15 @@ int convert_pcm_bit(const char* scr_path, const char* out_path, int sample_bit)
     printf("out_sample rate : %d\n", sample_rate);
     printf("out_pcm size    : %lu\n", out_size);
 
-    char y[4]; // 32bit frame size 
+    char frame[4]; // 32bit frame size
     size_t p = header_size; // skip header data from source file dump
     size_t frame_size = (raw_size - header_size) / 2; 
     
     for(size_t i = 0; i < frame_size; i++) { // shift 16 bit data to 32 bit, Little endian format
         
         // little endian 
-        memset(y, 0x00, 4);
-        memcpy(y+(sample_byte_size-2), pcm_buf+p, 2);
+        memset(frame, 0x00, 4);
+        memcpy(frame+(sample_byte_size-2), pcm_buf+p, 2);
         // or
         //y[2] = pcm_buf[p+1];
         //y[1] = pcm_buf[p];
@@ -204,7 +204,7 @@ int convert_pcm_bit(const char* scr_path, const char* out_path, int sample_bit)
         //y[2] = 0x00;
         //y[3] = 0x00;
     
-        fwrite(y, sample_byte_size, 1, f_out);
+        fwrite(frame, sample_byte_size, 1, f_out);
         p += 2; 
     } 
     fclose(f_out);
